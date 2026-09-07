@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Listado</title>
+  <link rel="stylesheet" href="../css/listado.css">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="registro.html">Registrarse</a>
+      <a href="avistamiento.html">Informar avistamiento</a>
+      <a href="listado.html" aria-current="page">Avistamientos</a>
+      <a href="estadisticas.html">Estadisticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Avistamientos registrados</h2>
+
+    <form class="controls" id="filters">
+      <label for="type-filter">Tipo de ave
+        <select id="type-filter" name="type-filter">
+          <option value="">Todos</option>
+          <option value="raptor">Rapaz</option>
+          <option value="aquatic">Acuatica</option>
+          <option value="seabird">Marina</option>
+          <option value="passerine">Paseriforme</option>
+          <option value="other">Otro</option>
+        </select>
+      </label>
+
+      <label for="per-page">Por pagina
+        <select id="per-page" name="per-page">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+        </select>
+      </label>
+    </form>
+
+    <p id="list-summary"></p>
+
+    <table>
+      <caption>Haz clic en el encabezado de una columna para ordenar.</caption>
+      <thead>
+        <tr>
+          <th><button type="button" data-column="date">Fecha y hora</button></th>
+          <th><button type="button" data-column="type">Tipo</button></th>
+          <th><button type="button" data-column="name">Ave</button></th>
+          <th><button type="button" data-column="place">Lugar</button></th>
+          <th>Voluntario(a)</th>
+          <th>Archivos</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+      </tbody>
+    </table>
+
+    <nav class="pagination" aria-label="Páginas del listado">
+      <button type="button" id="prev-page" class="secondary">Anterior</button>
+      <span id="page-indicator"></span>
+      <button type="button" id="next-page" class="secondary">Siguiente</button>
+    </nav>
+  </main>
+
+  <script src="../js/datos-ejemplo.js"></script>
+  <script src="../js/listado.js"></script>
+</body>
+</html>

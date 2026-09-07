@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Estadisticas</title>
+  <link rel="stylesheet" href="../css/estadisticas.css">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="registro.html">Registrarse</a>
+      <a href="avistamiento.html">Informar avistamiento</a>
+      <a href="listado.html">Avistamientos</a>
+      <a href="estadisticas.html" aria-current="page">Estadisticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Indicadores</h2>
+    <p>Resumen de la actividad de voluntarios y avistamientos registrados en la plataforma.</p>
+
+    <section class="chart">
+      <h3>Avistamientos por tipo de ave</h3>
+      <canvas id="types-chart"></canvas>
+    </section>
+
+    <section class="chart">
+      <h3>Avistamientos por mes</h3>
+      <canvas id="months-chart"></canvas>
+    </section>
+
+    <section class="chart">
+      <h3>Voluntarios registrados por región</h3>
+      <canvas id="regions-chart"></canvas>
+    </section>
+
+    <section class="chart">
+      <h3>Voluntarios más activos</h3>
+      <canvas id="volunteers-chart"></canvas>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="../js/datos-ejemplo.js"></script>
+  <script src="../js/estadisticas.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Informar avistamiento</title>
+  <link rel="stylesheet" href="../css/avistamiento.css">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="registro.html">Registrarse</a>
+      <a href="avistamiento.html" aria-current="page">Informar avistamiento</a>
+      <a href="listado.html">Avistamientos</a>
+      <a href="estadisticas.html">Estadisticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Informar un avistamiento</h2>
+    <p>
+      Solo pueden informar avistamientos los voluntarios registrados.
+      Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios.
+    </p>
+
+    <form id="sighting-form" novalidate>
+      <fieldset>
+        <legend>Voluntario(a)</legend>
+
+        <label for="volunteer-email">Correo con el que te registraste <abbr title="obligatorio">*</abbr></label>
+        <input type="email" id="volunteer-email" name="volunteer-email" placeholder="correo@ejemplo.cl">
+        <small>Formato : correo@ejemplo.cl</small>
+        <p class="error-message" id="error-volunteer-email"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>El ave</legend>
+
+        <label for="bird-type">Tipo de ave <abbr title="obligatorio">*</abbr></label>
+        <select id="bird-type" name="bird-type">
+          <option value="">Seleccione un tipo</option>
+          <option value="raptor">Rapaz</option>
+          <option value="aquatic">Acuática</option>
+          <option value="seabird">Marina</option>
+          <option value="passerine">Paseriforme (pajaro pequeño)</option>
+          <option value="other">Otro</option>
+        </select>
+        <p class="error-message" id="error-bird-type"></p>
+
+        <label for="bird-name">Nombre del ave <abbr title="obligatorio">*</abbr></label>
+        <input type="text" id="bird-name" name="bird-name" placeholder="Ej: Condor andino">
+        <p class="error-message" id="error-bird-name"></p>
+
+        <label for="quantity">Cantidad de individuos</label>
+        <input type="number" id="quantity" name="quantity" min="1" max="10000" value="1">
+        <p class="error-message" id="error-quantity"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Donde y cuando</legend>
+
+        <label for="sighting-region">Region <abbr title="obligatorio">*</abbr></label>
+        <select id="sighting-region" name="sighting-region">
+          <option value="">Seleccione una region</option>
+        </select>
+        <p class="error-message" id="error-sighting-region"></p>
+
+        <label for="sighting-commune">Comuna <abbr title="obligatorio">*</abbr></label>
+        <select id="sighting-commune" name="sighting-commune" disabled>
+          <option value="">Seleccione primero una region</option>
+        </select>
+        <small>Se habilita al elegir una región</small>
+        <p class="error-message" id="error-sighting-commune"></p>
+
+        <label for="place">Lugar <abbr title="obligatorio">*</abbr></label>
+        <input type="text" id="place" name="place" placeholder="Ej: Humedal de Batuco, orilla norte">
+        <small>Un lugar reconocible: parque, humedal, playa, cerro...</small>
+        <p class="error-message" id="error-place"></p>
+
+        <label for="date">Fecha del avistamiento <abbr title="obligatorio">*</abbr></label>
+        <input type="date" id="date" name="date">
+        <small>No puede ser futura ni tener más de un año de antigüedad.</small>
+        <p class="error-message" id="error-date"></p>
+
+        <label for="time">Hora del avistamiento <abbr title="obligatorio">*</abbr></label>
+        <input type="time" id="time" name="time">
+        <small>Si el avistamiento es de hoy, no puede ser posterior a la hora actual.</small>
+        <p class="error-message" id="error-time"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Evidencia</legend>
+
+        <label for="files">Fotos o videos <abbr title="obligatorio">*</abbr></label>
+        <input type="file" id="files" name="files" multiple accept="image/*,video/*">
+        <small>Al menos 1 archivo, máximo 5. Formatos: jpg, png, gif, webp, mp4, mov, webm. Máximo 50 MB cada uno.</small>
+        <p class="error-message" id="error-files"></p>
+
+        <label for="comment">Comentarios</label>
+        <textarea id="comment" name="comment" placeholder="Comportamiento, clima, otras aves cerca..."></textarea>
+        <small>Opcional. Máximo 500 caracteres.</small>
+        <p class="error-message" id="error-comment"></p>
+      </fieldset>
+
+      <button type="submit">Enviar avistamiento</button>
+      <button type="reset" class="secondary">Limpiar</button>
+    </form>
+    <p class="success" id="sighting-success" hidden>
+      Avistamiento enviado. Quedará visible en el
+      <a href="listado.html">listado</a> una vez revisado.
+    </p>
+  </main>
+
+
+
+  <script src="../js/regiones.js"></script>
+  <script src="../js/validaciones.js"></script>
+  <script src="../js/avistamiento.js"></script>
+</body>
+</html>

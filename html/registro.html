@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Registro de voluntario</title>
+  <link rel="stylesheet" href="../css/registro.css">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="registro.html" aria-current="page">Registrarse</a>
+      <a href="avistamiento.html">Informar avistamiento</a>
+      <a href="listado.html">Avistamientos</a>
+      <a href="estadisticas.html">Estadisticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Registro de voluntario(a)</h2>
+    <p>Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios.</p>
+    <form id="registration-form" novalidate>
+      <fieldset>
+        <legend>Datos personales</legend>
+        <label for="name">Nombre completo <abbr title="obligatorio">*</abbr></label>
+        <input type="text" id="name" name="name" placeholder="Ej: Mohamad Oweidat">
+        <small>Obligatorio</small>
+        <p class="error-message" id="error-name"></p>
+
+        <label for="birth-date">Fecha de nacimiento</label>
+        <input type="date" id="birth-date" name="birth-date">
+        <small>Opcional. Debes tener al menos 14 años para participar</small>
+        <p class="error-message" id="error-birth-date"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Contacto</legend>
+
+        <label for="email">Correo electrónico <abbr title="obligatorio">*</abbr></label>
+        <input type="email" id="email" name="email" placeholder="correo@ejemplo.cl">
+        <small>Obligatorio. Formato : correo@ejemplo.cl</small>
+        <p class="error-message" id="error-email"></p>
+
+        <label for="phone">Numero de celular</label>
+        <input type="tel" id="phone" name="phone" placeholder="+56 9 56906990">
+        <small>Opcional. Celular chileno de 9 dígitos</small>
+        <p class="error-message" id="error-phone"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Direccion postal</legend>
+
+        <label for="region">Region <abbr title="obligatorio">*</abbr></label>
+        <select id="region" name="region">
+          <option value="">Seleccione una region</option>
+        </select>
+        <small>Obligatorio</small>
+        <p class="error-message" id="error-region"></p>
+
+        <label for="commune">Comuna <abbr title="obligatorio">*</abbr></label>
+        <select id="commune" name="commune" disabled>
+          <option value="">Seleccione primero una region</option>
+        </select>
+        <small>Obligatorio. Se habilita al elegir una region</small>
+        <p class="error-message" id="error-commune"></p>
+
+        <label for="street">Calle y numero</label>
+        <input type="text" id="street" name="street" placeholder="Ej: Av Vicuna Mackenna 1290">
+        <small>Opcional</small>
+        <p class="error-message" id="error-street"></p>
+      </fieldset>
+
+      <button type="submit">Registrarme</button>
+      <button type="reset" class="secondary">Limpiar</button>
+    </form>
+      <p class="success" id="registration-success" hidden>
+        Registro enviado. Gracias por sumarte! Ya puedes
+        <a href="avistamiento.html">informar tu primer avistamiento</a>.
+      </p>
+  </main>
+
+  <script src="../js/regiones.js"></script>
+  <script src="../js/validaciones.js"></script>
+  <script src="../js/registro.js"></script>
+</body>
+</html>
