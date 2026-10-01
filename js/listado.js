@@ -11,12 +11,13 @@ let sortColumn = "date";
 let sortAscending = false; // most recent first
 let currentPage = 1;
 
+//filter the sightings by type selected
 function getFiltered() {
   const type = typeFilter.value;
   if (type === "") return SIGHTINGS.slice();
   return SIGHTINGS.filter(s => s.type === type);
 }
-
+//tri des sightings by column and order
 function sortList(list) {
   return list.sort(function (a, b) {
     let valueA = a[sortColumn];
@@ -30,14 +31,14 @@ function sortList(list) {
     return sortAscending ? comparison : -comparison;
   });
 }
-
+// Cette fonction transforme une date au format ISO (YYYY-MM-DD) et une heure (HH:MM) en (DD/MM/YYYY HH:MM).
 function formatDate(date, time) {
   const [year, month, day] = date.split("-");
   return day + "/" + month + "/" + year + " " + time;
 }
-
+//affichage
 function renderTable() {
-  const list = sortList(getFiltered());
+  const list = sortList(getFiltered());//filtrer puis trier
   const perPage = Number(perPageSelect.value);
   const totalPages = Math.max(1, Math.ceil(list.length / perPage));
 
@@ -78,7 +79,7 @@ function columnName(column) {
   return names[column];
 }
 
-
+//quand le filtre change, on reset la page à 1 et on rerender le tableau
 typeFilter.addEventListener("change", function () {
   currentPage = 1;
   renderTable();
@@ -88,7 +89,7 @@ perPageSelect.addEventListener("change", function () {
   currentPage = 1;
   renderTable();
 });
-
+//click sur les boutons de tri des colonnes
 document.querySelectorAll("th button").forEach(function (button) {
   button.addEventListener("click", function () {
     const column = button.dataset.column;
@@ -102,7 +103,7 @@ document.querySelectorAll("th button").forEach(function (button) {
     renderTable();
   });
 });
-
+//previous and next page buttons
 prevButton.addEventListener("click", function () {
   currentPage--;
   renderTable();

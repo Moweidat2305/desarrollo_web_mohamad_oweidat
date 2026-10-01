@@ -5,7 +5,7 @@ const regionSelect = document.getElementById("region");
 const communeSelect = document.getElementById("commune");
 
 loadRegions(regionSelect, communeSelect);
-
+// Validates the form fields and returns true if all are valid, false otherwise.
 function validateRegistration() {
   let allGood = true;
 

@@ -4,6 +4,7 @@ const GREEN = "seagreen";
 const PALETTE = ["seagreen", "darkseagreen", "goldenrod", "steelblue", "firebrick", "sienna"];
 
 // Counts how many times each value of a property appears in a list
+// COUNT AVISAMIENTO BY TYPE, MONTH, VOLUNTEER, REGION
 function countBy(list, property) {
   const counts = {};
   for (const item of list) {
@@ -12,7 +13,7 @@ function countBy(list, property) {
   }
   return counts;
 }
-
+//4PARAM canvasId: where to show the graph, labels: array of labels, values: array of values, horizontal: boolean for horizontal or vertical bar chart
 function barChart(canvasId, labels, values, horizontal) {
   new Chart(document.getElementById(canvasId), {
     type: "bar",

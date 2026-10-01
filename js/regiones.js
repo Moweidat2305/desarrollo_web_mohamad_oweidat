@@ -1,6 +1,6 @@
 // Regions of Chile with some of their communes.
 // Not every commune is included, only the most populated ones per region, enough for the prototype.
-
+//clé : region, valeur: tableau de communes
 const REGIONS = {
   "Arica y Parinacota": ["Arica", "Camarones", "Putre", "General Lagos"],
   "Tarapacá": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Pica", "Huara"],
