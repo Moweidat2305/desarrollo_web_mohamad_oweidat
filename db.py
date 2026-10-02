@@ -73,3 +73,48 @@ def insertar_voluntario(datos):
             ),
             datos,
         )
+
+
+def id_voluntario(email):
+    """Devuelve el id del voluntario con ese correo, o None si no existe."""
+    filas = consultar("SELECT id FROM voluntario WHERE email = :email", email=email)
+    if filas:
+        return filas[0]["id"]
+    return None
+
+
+def ave_existe(ave_id):
+    filas = consultar("SELECT id FROM ave WHERE id = :id", id=ave_id)
+    return len(filas) > 0
+
+
+def insertar_avistamiento(datos, registros):
+    """Inserta el avistamiento y una fila en registro por cada archivo.
+
+    registros: lista de (ruta_archivo, nombre_archivo).
+    Todo va en una sola transaccion: si algo falla, no queda nada a medias.
+    """
+    with engine.begin() as conn:
+        resultado = conn.execute(
+            text(
+                """
+                INSERT INTO avistamiento
+                    (voluntario_id, ave_id, fecha_hora, lugar, descripcion, cantidad, comuna_id)
+                VALUES
+                    (:voluntario_id, :ave_id, :fecha_hora, :lugar, :descripcion, :cantidad, :comuna_id)
+                """
+            ),
+            datos,
+        )
+        avistamiento_id = resultado.lastrowid
+
+        for ruta, nombre in registros:
+            conn.execute(
+                text(
+                    """
+                    INSERT INTO registro (ruta_archivo, nombre_archivo, avistamiento_id)
+                    VALUES (:ruta, :nombre, :avistamiento_id)
+                    """
+                ),
+                {"ruta": ruta, "nombre": nombre, "avistamiento_id": avistamiento_id},
+            )
