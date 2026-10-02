@@ -7,6 +7,8 @@ import os
 import re
 from datetime import date, datetime, time, timedelta
 
+import filetype
+
 import db
 
 REGEX_EMAIL = r"[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}"
@@ -46,6 +48,18 @@ def tamano(archivo):
     bytes_totales = archivo.stream.tell()
     archivo.stream.seek(0)
     return bytes_totales
+
+
+def contenido_es_imagen_o_video(archivo):
+    """Mira los primeros bytes del archivo para saber que es de verdad.
+
+    La extension y el tipo que manda el navegador se pueden falsificar,
+    el contenido no: un HTML renombrado como foto.png no empieza como un PNG.
+    """
+    inicio = archivo.stream.read(261)
+    archivo.stream.seek(0)
+    tipo = filetype.guess(inicio)
+    return tipo is not None and tipo.mime.startswith(("image/", "video/"))
 
 
 # ---------- Voluntario ----------
@@ -194,6 +208,9 @@ def validar_avistamiento(form, archivos):
             es_imagen_o_video = archivo.mimetype.startswith(("image/", "video/"))
             if extension(archivo.filename) not in EXTENSIONES_PERMITIDAS or not es_imagen_o_video:
                 errores["files"] = "El archivo " + archivo.filename + " no es una imagen ni un video permitido."
+                break
+            if not contenido_es_imagen_o_video(archivo):
+                errores["files"] = "El contenido de " + archivo.filename + " no es una imagen ni un video."
                 break
             if tamano(archivo) > MAX_TAMANO:
                 errores["files"] = "El archivo " + archivo.filename + " supera los 50 MB."

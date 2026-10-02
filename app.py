@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)  # firma la cookie de los mensajes flash
 
 # Limite total de una peticion: 5 archivos de 50 MB mas el resto del formulario.
-# Si se supera, Flask responde 413 sin leer todo.
+# Si se supera, Flask responde 413 sin leer todo (ver envio_muy_grande mas abajo).
 app.config["MAX_CONTENT_LENGTH"] = 260 * 1024 * 1024
 
 CARPETA_UPLOADS = os.path.join(app.static_folder, "uploads")
@@ -74,7 +74,13 @@ def avistamiento():
         errores, datos, archivos = validar_avistamiento(request.form, request.files.getlist("files"))
         if not errores:
             registros = guardar_archivos(archivos)
-            db.insertar_avistamiento(datos, registros)
+            try:
+                db.insertar_avistamiento(datos, registros)
+            except Exception:
+                # Si la base falla, se borran los archivos para no dejar basura en el disco
+                for ruta, nombre in registros:
+                    os.remove(os.path.join(app.static_folder, ruta))
+                raise
             flash("¡Gracias! Tu avistamiento quedó registrado.")
             return redirect(url_for("index"))
     else:
@@ -129,6 +135,20 @@ def detalle(avistamiento_id):
 @app.route("/estadisticas")
 def estadisticas():
     return render_template("estadisticas.html")
+
+
+@app.errorhandler(413)
+def envio_muy_grande(error):
+    """Si el envio supera MAX_CONTENT_LENGTH, se vuelve al formulario con un mensaje claro."""
+    errores = {"files": "Los archivos son demasiado grandes. Máximo 50 MB cada uno."}
+    return render_template(
+        "avistamiento.html",
+        regiones=db.obtener_regiones(),
+        comunas=db.obtener_comunas(),
+        aves=db.obtener_aves(),
+        valores={},
+        errores=errores,
+    ), 413
 
 
 if __name__ == "__main__":

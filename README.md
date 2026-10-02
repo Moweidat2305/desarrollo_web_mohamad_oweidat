@@ -57,10 +57,12 @@ sql/              los archivos SQL del enunciado y mis ajustes
 
 Si hay un error, el formulario vuelve a aparecer con los mensajes y con lo que el usuario ya habia escrito. Solo los archivos hay que adjuntarlos de nuevo, porque el navegador no deja que una pagina rellene ese campo.
 
-**Archivos.** Se aceptan de 1 a 5 fotos o videos (jpg, jpeg, png, gif, webp, mp4, mov, webm) de maximo 50 MB cada uno. El servidor revisa la extension, el tipo y el tamaño.
+**Archivos.** Se aceptan de 1 a 5 fotos o videos (jpg, jpeg, png, gif, webp, mp4, mov, webm) de maximo 50 MB cada uno. El servidor revisa la extension, el tipo, el tamaño y tambien el contenido real del archivo: con la libreria `filetype` lee los primeros bytes para saber si de verdad es una imagen o un video. Asi un archivo HTML renombrado como `foto.png` no pasa.
 Cada archivo se guarda en `static/uploads/` con un nombre al azar. Asi dos fotos con el mismo nombre no se pisan, y nadie puede elegir donde se guarda el archivo.
 En la tabla `registro` queda la ruta y el nombre original del archivo.
 El avistamiento y sus archivos se guardan en una sola transaccion: o se guarda todo, o nada.
+Si la base de datos falla despues de copiar los archivos, se borran del disco para no dejar archivos sueltos.
+Si alguien envia mas de 260 MB en total, el formulario vuelve a aparecer con un mensaje claro en vez de una pagina de error.
 
 **Seguridad.** Las consultas SQL siempre reciben los valores como parametros, nunca pegados al texto, asi se evita la inyeccion SQL.
 Jinja escapa todo lo que muestra, entonces si alguien escribe un `<script>` en un campo, se ve como texto y no se ejecuta.
