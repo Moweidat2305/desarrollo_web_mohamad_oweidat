@@ -164,3 +164,52 @@ th button:hover {
     display: none;
   }
 }
+
+/* Tarea 2: filas clicables y pagina de detalle */
+
+tr[data-url] {
+  cursor: pointer;
+}
+
+tr[data-url]:hover {
+  background: var(--light-green);
+}
+
+.detalle dt {
+  font-weight: bold;
+}
+
+.detalle dd {
+  margin: 0 0 0.8rem;
+}
+
+.archivos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.archivos img,
+.archivos video {
+  width: 400px;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+}
+
+.pagination a {
+  padding: 0.6rem 1.4rem;
+  background: white;
+  color: var(--green);
+  border: 1px solid var(--green);
+  border-radius: 3px;
+  text-decoration: none;
+}
+
+.pagination a:hover {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}

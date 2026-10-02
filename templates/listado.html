@@ -20,7 +20,50 @@
 
   <main>
     <h2>Avistamientos registrados</h2>
-    <p>El listado se conectará a la base de datos en la siguiente etapa.</p>
+
+    {% if avistamientos %}
+    <p>{{ total }} avistamiento{% if total != 1 %}s{% endif %}, del más reciente al más antiguo.</p>
+
+    <table>
+      <caption>Haz clic en una fila para ver el detalle del avistamiento.</caption>
+      <thead>
+        <tr>
+          <th>Fecha y hora</th>
+          <th>Ave</th>
+          <th>Lugar</th>
+          <th>Comuna</th>
+          <th>Voluntario(a)</th>
+          <th>Archivos</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in avistamientos %}
+        <tr data-url="{{ url_for('detalle', avistamiento_id=a.id) }}">
+          <td><a href="{{ url_for('detalle', avistamiento_id=a.id) }}">{{ a.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</a></td>
+          <td>{{ a.ave }}</td>
+          <td>{{ a.lugar }}</td>
+          <td>{{ a.comuna }}</td>
+          <td>{{ a.voluntario }}</td>
+          <td>{{ a.total_archivos }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <nav class="pagination" aria-label="Páginas del listado">
+      {% if pagina > 1 %}
+      <a href="{{ url_for('listado', pagina=pagina - 1) }}">Anterior</a>
+      {% endif %}
+      <span>Página {{ pagina }} de {{ total_paginas }}</span>
+      {% if pagina < total_paginas %}
+      <a href="{{ url_for('listado', pagina=pagina + 1) }}">Siguiente</a>
+      {% endif %}
+    </nav>
+    {% else %}
+    <p>Aún no hay avistamientos registrados.</p>
+    {% endif %}
   </main>
+
+  <script src="{{ url_for('static', filename='js/listado.js') }}"></script>
 </body>
 </html>

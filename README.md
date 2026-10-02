@@ -1,49 +1,73 @@
-# Tarea 1 - Registro de avistamientos de aves - Mohamad Oweidat
+# Tarea 2 - Registro de avistamientos de aves - Mohamad Oweidat
 
+En esta tarea el prototipo de la tarea 1 pasa a funcionar de verdad, con Flask y una base de datos MySQL.
+Se puede registrar un voluntario, informar un avistamiento con fotos o videos, y ver el listado de avistamientos con su detalle.
+Las estadísticas quedan para la tarea 3.
+
+La rama se llama `Tarea_2` y no "Tarea 2" porque git no acepta espacios en el nombre de una rama. Use el mismo formato que en la tarea 1.
+
+## Como ejecutarlo
+
+Primero crear la base de datos, en este orden:
+
+```
+mysql -u root --default-character-set=utf8mb4 < sql/tarea2.sql
+mysql -u root --default-character-set=utf8mb4 tarea2 < sql/region-comuna.sql
+mysql -u root --default-character-set=utf8mb4 tarea2 < sql/aves.sql
+mysql -u root --default-character-set=utf8mb4 < sql/ajustes.sql
+```
+
+Despues instalar lo necesario y lanzar la aplicacion:
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
+
+La pagina queda en http://127.0.0.1:5001. Use el puerto 5001 porque en mi Mac el 5000 lo ocupa AirPlay.
 
 ## Estructura
 
 ```
-tarea1/
-├── README.md
-├── html/     una pagina por funcionalidad
-├── css/      una hoja de estilos por pagina con el mismo nombre
-└── js/       un script por pagina + tres compartidos
+app.py            las paginas (rutas de Flask) y el guardado de archivos
+db.py             la conexion a la base y todas las consultas SQL
+validaciones.py   las validaciones del lado del servidor
+templates/        una pagina HTML por funcionalidad
+static/css, js    los estilos y scripts de la tarea 1, adaptados
+static/uploads/   las fotos y videos subidos (se crea sola, no se sube a GitHub)
+sql/              los archivos SQL del enunciado y mis ajustes
 ```
-
-## Paginas
-
-| Archivo | Qué hace |
-|---|---|
-| `index.html` | Portada con contadores y explicacion de como participar |
-| `registro.html` | Formulario de registro de voluntario(a) |
-| `avistamiento.html` | Formulario para informar un avistamiento |
-| `listado.html` | Tabla de avistamientos con filtro por tipo, orden por columna y paginación |
-| `estadisticas.html` | Cuatro graficos sobre voluntarios y avistamientos |
-
-
-
-En `js/` hay un script por página más tres compartidos: `regiones.js` (regiones y comunas), `validaciones.js` (reglas comunes a ambos formularios) y `datos-ejemplo.js` (datos inventados para poblar el listado y los graficos).
 
 ## Decisiones que conviene tener en cuenta
 
-- **Regiones y comunas.** Están en `regiones.js` como un objeto. No incluí las 346 comunas del país, solo las más pobladas de cada una de las 16 regiones, que es suficiente para el prototipo. El select de comunas se llena según la región elegida y queda deshabilitado mientras no haya región.
-- **Reglas de validación definidas:**
-  - Nombre: obligatorio.
-  - Fecha de nacimiento: opcional; si se ingresa al menos 14 años y no mas de 120.
-  - Email: obligatorio, formato `correo@ejemplo.cl`.
-  - Celular: opcional; formato chileno de 9 dígitos empezando por 9, con o sin `+56` y espacios.
-  - Región y comuna: obligatorias (select).
-  - Calle: opcional maximo 120 caracteres.
-  - Tipo y nombre del ave: obligatorios; nombre entre 2 y 60 caracteres.
-  - Cantidad de individuos: opcional, entero entre 1 y 10000.
-  - Lugar: obligatorio, 3 a 100 caracteres.
-  - Fecha del avistamiento: obligatoria, no futura y no mas de un año atras.
-  - Hora: obligatoria; si la fecha es hoy, no puede ser posterior a la hora actual.
-  - Archivos: entre 1 y 5, extensiones de imagen o video, maximo 50 MB cada uno. Se revisa la extension del nombre y el tamaño desde el objeto `File`.
-  - Comentario: opcional, maximo 500 caracteres.
-- **Al enviar un formulario válido** no se envía nada a ningun lado (no hay servidor); se oculta el formulario y se muestra un mensaje de éxito con un enlace a la siguiente accion. El enunciado indica que no es necesario almacenar lo que ingresa el usuario, asi que el listado y los graficos muestran solo los datos de ejemplo.
-- **Listado.** Los datos son ficticios (`datos-ejemplo.js`). Se ordena haciendo clic en el encabezado de la columna; un segundo clic invierte el orden. Por defecto se muestran los mas recientes primero, 5 por pagina, configurable. El filtro por tipo reinicia a la pagina 1.
-- **Graficos.** Usé Chart.js cargado desde CDN asi que la pagina de estadisticas necesita conexion a internet. Los conteos se calculan en `estadisticas.js` a partir de los datos de ejemplo.
-- **HTML semántico.** Cada página usa `header`, `nav`, `main`, `section`, `fieldset`/`legend`, `table` con `caption`, y `footer`. No hay `div`.
-- **Validadores W3C.** HTML y CSS pasan sin errores.
+**Cambios al modelo de datos.** No toque `tarea2.sql`. Mis cambios estan todos en `sql/ajustes.sql`. Los hice para no perder campos ni validaciones del formulario de la tarea 1:
+- En `voluntario` agregue la fecha de nacimiento y la calle, las dos opcionales. El telefono puede quedar vacio porque en la tarea 1 era opcional.
+- El correo es unico. Es el dato que uso para saber a que voluntario pertenece un avistamiento, asi que no puede repetirse.
+- En `avistamiento` agregue la cantidad de individuos y la comuna donde se vio el ave. El ave no siempre se ve en la comuna donde vive el voluntario.
+- Saque el campo "tipo de ave" porque la tabla `ave` no tiene tipo. El nombre del ave ya no se escribe a mano, se elige de la lista de la tabla `ave`.
+- La fecha y la hora del formulario se guardan juntas en `fecha_hora`.
+- `fecha_registro` se llena con `NOW()` en el momento en que se inserta el voluntario.
+
+**Validaciones.** El JavaScript de la tarea 1 sigue igual. El servidor vuelve a revisar todo con las mismas reglas, porque el JavaScript se puede desactivar o saltar. Ademas revisa cosas que el navegador no puede saber:
+- al registrarse, que el correo no este ya registrado;
+- al informar un avistamiento, que el correo sea de un voluntario registrado;
+- que la comuna sea de la region elegida y que el ave exista en la base.
+
+Si hay un error, el formulario vuelve a aparecer con los mensajes y con lo que el usuario ya habia escrito. Solo los archivos hay que adjuntarlos de nuevo, porque el navegador no deja que una pagina rellene ese campo.
+
+**Archivos.** Se aceptan de 1 a 5 fotos o videos (jpg, jpeg, png, gif, webp, mp4, mov, webm) de maximo 50 MB cada uno. El servidor revisa la extension, el tipo y el tamaño.
+Cada archivo se guarda en `static/uploads/` con un nombre al azar. Asi dos fotos con el mismo nombre no se pisan, y nadie puede elegir donde se guarda el archivo.
+En la tabla `registro` queda la ruta y el nombre original del archivo.
+El avistamiento y sus archivos se guardan en una sola transaccion: o se guarda todo, o nada.
+
+**Seguridad.** Las consultas SQL siempre reciben los valores como parametros, nunca pegados al texto, asi se evita la inyeccion SQL.
+Jinja escapa todo lo que muestra, entonces si alguien escribe un `<script>` en un campo, se ve como texto y no se ejecuta.
+Los numeros que llegan por la URL (la pagina del listado, el id del detalle) se convierten a numero y se revisan. Si el avistamiento no existe, la pagina responde 404.
+
+**Paginas.**
+- La portada muestra los 2 ultimos avistamientos agregados a la base, es decir los de id mas alto.
+- Despues de registrarse, se ofrece informar un avistamiento con el correo ya escrito, o volver al inicio.
+- El listado muestra 5 avistamientos por pagina, del mas reciente al mas antiguo. Al hacer clic en una fila se abre el detalle con las fotos y videos.
+- Las estadisticas siguen con los datos de ejemplo de la tarea 1 hasta la tarea 3.

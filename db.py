@@ -118,3 +118,54 @@ def insertar_avistamiento(datos, registros):
                 ),
                 {"ruta": ruta, "nombre": nombre, "avistamiento_id": avistamiento_id},
             )
+
+
+def contar_avistamientos():
+    return consultar("SELECT COUNT(*) AS total FROM avistamiento")[0]["total"]
+
+
+def pagina_avistamientos(pagina, por_pagina):
+    """Los avistamientos de una pagina, del mas reciente al mas antiguo."""
+    return consultar(
+        """
+        SELECT a.id, a.fecha_hora, a.lugar,
+               ave.nombre AS ave, c.nombre AS comuna, v.nombre AS voluntario,
+               (SELECT COUNT(*) FROM registro r WHERE r.avistamiento_id = a.id) AS total_archivos
+        FROM avistamiento a
+        JOIN ave ON ave.id = a.ave_id
+        JOIN comuna c ON c.id = a.comuna_id
+        JOIN voluntario v ON v.id = a.voluntario_id
+        ORDER BY a.fecha_hora DESC, a.id DESC
+        LIMIT :limite OFFSET :desde
+        """,
+        limite=por_pagina,
+        desde=(pagina - 1) * por_pagina,
+    )
+
+
+def obtener_avistamiento(avistamiento_id):
+    """Un avistamiento con todos sus datos, o None si no existe."""
+    filas = consultar(
+        """
+        SELECT a.id, a.fecha_hora, a.lugar, a.descripcion, a.cantidad,
+               ave.nombre AS ave, c.nombre AS comuna, reg.nombre AS region,
+               v.nombre AS voluntario
+        FROM avistamiento a
+        JOIN ave ON ave.id = a.ave_id
+        JOIN comuna c ON c.id = a.comuna_id
+        JOIN region reg ON reg.id = c.region_id
+        JOIN voluntario v ON v.id = a.voluntario_id
+        WHERE a.id = :id
+        """,
+        id=avistamiento_id,
+    )
+    if filas:
+        return filas[0]
+    return None
+
+
+def archivos_de_avistamiento(avistamiento_id):
+    return consultar(
+        "SELECT ruta_archivo, nombre_archivo FROM registro WHERE avistamiento_id = :id ORDER BY id",
+        id=avistamiento_id,
+    )

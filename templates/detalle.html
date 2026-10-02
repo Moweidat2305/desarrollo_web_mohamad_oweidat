@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Detalle</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Inicio</a>
+      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
+      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
+      <a href="{{ url_for('listado') }}" aria-current="page">Avistamientos</a>
+      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>{{ a.ave }}</h2>
+
+    <dl class="detalle">
+      <dt>Fecha y hora</dt>
+      <dd>{{ a.fecha_hora.strftime('%d/%m/%Y %H:%M') }}</dd>
+
+      <dt>Cantidad de individuos</dt>
+      <dd>{{ a.cantidad if a.cantidad else 'No indicada' }}</dd>
+
+      <dt>Lugar</dt>
+      <dd>{{ a.lugar }}</dd>
+
+      <dt>Comuna y región</dt>
+      <dd>{{ a.comuna }}, {{ a.region }}</dd>
+
+      <dt>Informado por</dt>
+      <dd>{{ a.voluntario }}</dd>
+
+      <dt>Comentarios</dt>
+      <dd>{{ a.descripcion if a.descripcion else 'Sin comentarios' }}</dd>
+    </dl>
+
+    <section>
+      <h3>Fotos y videos</h3>
+      {% if archivos %}
+      <ul class="archivos">
+        {% for archivo in archivos %}
+        <li>
+          {% if archivo.es_video %}
+          <video controls src="{{ url_for('static', filename=archivo.ruta_archivo) }}">
+            Tu navegador no puede reproducir el video {{ archivo.nombre_archivo }}.
+          </video>
+          {% else %}
+          <img src="{{ url_for('static', filename=archivo.ruta_archivo) }}" alt="Foto del avistamiento: {{ archivo.nombre_archivo }}">
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Este avistamiento no tiene archivos.</p>
+      {% endif %}
+    </section>
+
+    <p><a href="{{ url_for('listado') }}">Volver al listado</a></p>
+  </main>
+</body>
+</html>

@@ -1,8 +1,9 @@
 """Tarea 2: aplicacion Flask para registrar avistamientos de aves."""
+import math
 import os
 import uuid
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, url_for
 from werkzeug.utils import secure_filename
 
 import db
@@ -16,6 +17,8 @@ app.secret_key = os.urandom(24)  # firma la cookie de los mensajes flash
 app.config["MAX_CONTENT_LENGTH"] = 260 * 1024 * 1024
 
 CARPETA_UPLOADS = os.path.join(app.static_folder, "uploads")
+POR_PAGINA = 5
+EXTENSIONES_VIDEO = (".mp4", ".mov", ".webm")
 
 
 def guardar_archivos(archivos):
@@ -90,7 +93,37 @@ def avistamiento():
 
 @app.route("/listado")
 def listado():
-    return render_template("listado.html")
+    total = db.contar_avistamientos()
+    total_paginas = max(1, math.ceil(total / POR_PAGINA))
+
+    # type=int: si en la URL viene algo que no es un numero, se usa 1
+    pagina = request.args.get("pagina", 1, type=int)
+    if pagina < 1:
+        pagina = 1
+    if pagina > total_paginas:
+        pagina = total_paginas
+
+    return render_template(
+        "listado.html",
+        avistamientos=db.pagina_avistamientos(pagina, POR_PAGINA),
+        pagina=pagina,
+        total_paginas=total_paginas,
+        total=total,
+    )
+
+
+@app.route("/detalle/<int:avistamiento_id>")
+def detalle(avistamiento_id):
+    # <int:...> hace que Flask responda 404 si el id no es un numero
+    avistamiento = db.obtener_avistamiento(avistamiento_id)
+    if avistamiento is None:
+        abort(404)
+
+    archivos = db.archivos_de_avistamiento(avistamiento_id)
+    for archivo in archivos:
+        archivo["es_video"] = archivo["ruta_archivo"].endswith(EXTENSIONES_VIDEO)
+
+    return render_template("detalle.html", a=avistamiento, archivos=archivos)
 
 
 @app.route("/estadisticas")
