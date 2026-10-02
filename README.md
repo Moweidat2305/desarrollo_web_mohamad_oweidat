@@ -33,6 +33,13 @@ python app.py
 
 Despues abrir http://127.0.0.1:5001 (uso el puerto 5001 porque en Mac el 5000 lo ocupa AirPlay).
 
+Si root tiene contraseña, agregar `-p` a los comandos `mysql`.
+
+En Windows:
+- los comandos `mysql` con `<` funcionan en cmd, no en PowerShell
+- activar el entorno con `.venv\Scripts\activate`
+- usar `python` en vez de `python3`
+
 ## Lo que conviene saber
 
 - **No cambie `tarea2.sql`.** Mis cambios a la base estan en `sql/ajustes.sql`: agregue la fecha de nacimiento y la calle del voluntario, la cantidad y la comuna del avistamiento, deje el telefono opcional y el correo unico. Asi el formulario de la tarea 1 no pierde ningun campo.
