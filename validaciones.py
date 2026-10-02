@@ -1,8 +1,5 @@
-"""Validaciones del lado del servidor.
-
-Repiten las reglas del JavaScript, porque el JavaScript se puede desactivar
-o saltar enviando el formulario directamente.
-"""
+"""Validaciones del servidor: las mismas reglas que el JavaScript,
+porque el JavaScript se puede desactivar."""
 import os
 import re
 from datetime import date, datetime, time, timedelta
@@ -21,7 +18,7 @@ MAX_ARCHIVOS = 5
 
 
 def a_entero(texto):
-    """Convierte un texto a entero, o devuelve None si no es un numero."""
+    """Texto a numero, o None si no es un numero."""
     try:
         return int(texto)
     except ValueError:
@@ -43,7 +40,7 @@ def extension(nombre_archivo):
 
 
 def tamano(archivo):
-    """Tamano en bytes de un archivo subido: se va al final y se vuelve al inicio."""
+    """Tamano del archivo en bytes."""
     archivo.stream.seek(0, os.SEEK_END)
     bytes_totales = archivo.stream.tell()
     archivo.stream.seek(0)
@@ -51,25 +48,18 @@ def tamano(archivo):
 
 
 def contenido_es_imagen_o_video(archivo):
-    """Mira los primeros bytes del archivo para saber que es de verdad.
-
-    La extension y el tipo que manda el navegador se pueden falsificar,
-    el contenido no: un HTML renombrado como foto.png no empieza como un PNG.
-    """
+    """Lee el inicio del archivo para saber si de verdad es una imagen o un video.
+    La extension se puede falsificar, el contenido no."""
     inicio = archivo.stream.read(261)
     archivo.stream.seek(0)
     tipo = filetype.guess(inicio)
     return tipo is not None and tipo.mime.startswith(("image/", "video/"))
 
 
-# ---------- Voluntario ----------
+#Voluntario
 
 def validar_voluntario(form):
-    """Devuelve (errores, datos).
-
-    errores: diccionario campo -> mensaje. Si esta vacio, todo esta bien.
-    datos: los valores limpios, listos para insertar en la tabla voluntario.
-    """
+    """Devuelve (errores, datos). Sin errores, datos esta listo para guardar."""
     errores = {}
 
     nombre = form.get("name", "").strip()
@@ -119,7 +109,7 @@ def validar_voluntario(form):
     datos = {
         "nombre": nombre,
         "email": email,
-        "telefono": telefono or None,  # campo vacio -> NULL en la base
+        "telefono": telefono or None,  # vacio = NULL
         "fecha_nacimiento": nacimiento,
         "calle": calle or None,
         "comuna_id": comuna_id,
@@ -127,14 +117,10 @@ def validar_voluntario(form):
     return errores, datos
 
 
-# ---------- Avistamiento ----------
+#Avistamiento
 
 def validar_avistamiento(form, archivos):
-    """Devuelve (errores, datos, archivos).
-
-    datos: valores limpios para la tabla avistamiento.
-    archivos: solo los archivos realmente adjuntados.
-    """
+    """Devuelve (errores, datos, archivos). archivos son solo los adjuntados."""
     errores = {}
 
     email = form.get("volunteer-email", "").strip()
@@ -172,7 +158,7 @@ def validar_avistamiento(form, archivos):
     if len(lugar) < 3 or len(lugar) > 100:
         errores["place"] = "Describe el lugar en entre 3 y 100 caracteres."
 
-    # Fecha y hora se validan por separado y despues se juntan en fecha_hora
+    # Fecha y hora se revisan por separado y despues se juntan
     fecha_texto = form.get("date", "").strip()
     hora_texto = form.get("time", "").strip()
     fecha = None
@@ -197,7 +183,7 @@ def validar_avistamiento(form, archivos):
         if fecha_hora > datetime.now():
             errores["time"] = "La hora no puede ser posterior a la actual."
 
-    # Un input file vacio igual envia un archivo sin nombre: se descarta
+    # Se ignoran los campos de archivo vacios
     archivos = [archivo for archivo in archivos if archivo.filename != ""]
     if len(archivos) == 0:
         errores["files"] = "Debes adjuntar al menos una foto o video."
@@ -220,7 +206,7 @@ def validar_avistamiento(form, archivos):
     if len(comentario) > 500:
         errores["comment"] = "El comentario no puede superar los 500 caracteres."
 
-    # El navegador no puede volver a llenar un input file, hay que avisarle al usuario
+    # El navegador no vuelve a llenar los archivos, hay que avisar
     if errores and "files" not in errores:
         errores["files"] = "Vuelve a adjuntar tus archivos."
 

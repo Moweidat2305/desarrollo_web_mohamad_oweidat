@@ -1,4 +1,4 @@
-"""Conexion y consultas a la base de datos tarea2 con SQLAlchemy."""
+"""Conexion a la base de datos y todas las consultas SQL."""
 from sqlalchemy import create_engine, text
 
 DB_URL = "mysql+pymysql://cc5002:programacionweb@localhost:3306/tarea2?charset=utf8mb4"
@@ -6,11 +6,8 @@ engine = create_engine(DB_URL)
 
 
 def consultar(sql, **parametros):
-    """Ejecuta un SELECT y devuelve las filas como lista de diccionarios.
-
-    Los valores van como parametros (:nombre en el SQL), nunca pegados al texto,
-    asi SQLAlchemy los escapa y se evita la inyeccion SQL.
-    """
+    """Hace un SELECT y devuelve una lista de diccionarios.
+    Los valores van como parametros para evitar la inyeccion SQL."""
     with engine.connect() as conn:
         filas = conn.execute(text(sql), parametros).mappings().all()
     return [dict(fila) for fila in filas]
@@ -29,7 +26,7 @@ def obtener_aves():
 
 
 def ultimos_avistamientos(cantidad):
-    """Los ultimos avistamientos agregados: el id mas alto es el insertado mas tarde."""
+    """Los ultimos avistamientos agregados (id mas alto primero)."""
     return consultar(
         """
         SELECT a.id, a.fecha_hora, a.lugar,
@@ -60,8 +57,8 @@ def comuna_en_region(comuna_id, region_id):
 
 
 def insertar_voluntario(datos):
-    """Inserta un voluntario. fecha_registro es el momento de la insercion."""
-    with engine.begin() as conn:  # begin: hace COMMIT al final si no hubo error
+    """Guarda un voluntario. NOW() pone la fecha y hora del registro."""
+    with engine.begin() as conn:  # begin guarda todo al final si no hay error
         conn.execute(
             text(
                 """
@@ -76,7 +73,7 @@ def insertar_voluntario(datos):
 
 
 def id_voluntario(email):
-    """Devuelve el id del voluntario con ese correo, o None si no existe."""
+    """El id del voluntario con ese correo, o None si no existe."""
     filas = consultar("SELECT id FROM voluntario WHERE email = :email", email=email)
     if filas:
         return filas[0]["id"]
@@ -89,11 +86,8 @@ def ave_existe(ave_id):
 
 
 def insertar_avistamiento(datos, registros):
-    """Inserta el avistamiento y una fila en registro por cada archivo.
-
-    registros: lista de (ruta_archivo, nombre_archivo).
-    Todo va en una sola transaccion: si algo falla, no queda nada a medias.
-    """
+    """Guarda el avistamiento y una fila en registro por cada archivo.
+    Todo junto: si algo falla, no se guarda nada."""
     with engine.begin() as conn:
         resultado = conn.execute(
             text(
@@ -144,7 +138,7 @@ def pagina_avistamientos(pagina, por_pagina):
 
 
 def obtener_avistamiento(avistamiento_id):
-    """Un avistamiento con todos sus datos, o None si no existe."""
+    """Todos los datos de un avistamiento, o None si no existe."""
     filas = consultar(
         """
         SELECT a.id, a.fecha_hora, a.lugar, a.descripcion, a.cantidad,

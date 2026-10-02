@@ -12,8 +12,8 @@ from validaciones import validar_avistamiento, validar_voluntario
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # firma la cookie de los mensajes flash
 
-# Limite total de una peticion: 5 archivos de 50 MB mas el resto del formulario.
-# Si se supera, Flask responde 413 sin leer todo (ver envio_muy_grande mas abajo).
+# Limite total de una peticion: 5 archivos de 50 MB mas el resto del formulario
+# Si se supera, Flask responde 413 sin leer todo (ver envio_muy_grande mas abajo)
 app.config["MAX_CONTENT_LENGTH"] = 260 * 1024 * 1024
 
 CARPETA_UPLOADS = os.path.join(app.static_folder, "uploads")
@@ -22,8 +22,8 @@ EXTENSIONES_VIDEO = (".mp4", ".mov", ".webm")
 
 
 def guardar_archivos(archivos):
-    """Guarda cada archivo con un nombre unico y devuelve [(ruta, nombre_original)].
-
+    """Comentario del funcion:
+    Guarda cada archivo con un nombre unico y devuelve [(ruta, nombre_original)].
     El nombre en disco es aleatorio (uuid): asi dos archivos con el mismo nombre
     no se pisan y nadie puede elegir la ruta donde se guarda.
     """
@@ -55,7 +55,7 @@ def registro():
             db.insertar_voluntario(datos)
             return render_template("registro_ok.html", nombre=datos["nombre"], email=datos["email"])
 
-    # GET, o POST con errores: se muestra el formulario con lo que escribio el usuario
+    # GET o POST con errores: se muestra el formulario con lo que escribio el usuario
     return render_template(
         "registro.html",
         regiones=db.obtener_regiones(),
