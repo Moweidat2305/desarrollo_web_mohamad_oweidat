@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Inicio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="{{ url_for('index') }}" aria-current="page">Inicio</a>
+      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
+      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
+      <a href="{{ url_for('listado') }}">Avistamientos</a>
+      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+    </nav>
+  </header>
+
+  <main>
+    {% for mensaje in get_flashed_messages() %}
+    <p class="success">{{ mensaje }}</p>
+    {% endfor %}
+
+    <h2>Unión de Ornitólogos de Chile</h2>
+    <p>
+      Bienvenido(a) a la plataforma que reúne los avistamientos de aves que reportan
+      personas voluntarias a lo largo del país. Con esos datos queremos seguir de cerca
+      cómo cambian las poblaciones de aves frente a los fenómenos del clima.
+    </p>
+
+    <section>
+      <h2>¿Qué quieres hacer?</h2>
+      <ul class="menu">
+        <li><a href="{{ url_for('registro') }}">Registrar voluntario</a></li>
+        <li><a href="{{ url_for('avistamiento') }}">Informar avistamiento</a></li>
+        <li><a href="{{ url_for('estadisticas') }}">Estadísticas</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Últimos avistamientos</h2>
+      {% if ultimos %}
+      <ul class="ultimos">
+        {% for a in ultimos %}
+        <li>
+          <strong>{{ a.ave }}</strong><br>
+          {{ a.fecha_hora.strftime('%d/%m/%Y %H:%M') }} en {{ a.lugar }}, {{ a.comuna }}<br>
+          Informado por {{ a.voluntario }}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Aún no hay avistamientos registrados.</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <footer>
+    <p>Desarrollo de Aplicaciones Web, Tarea 2, Mohamad Oweidat</p>
+  </footer>
+</body>
+</html>

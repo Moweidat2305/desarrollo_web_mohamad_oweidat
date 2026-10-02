@@ -4,7 +4,8 @@ const form = document.getElementById("registration-form");
 const regionSelect = document.getElementById("region");
 const communeSelect = document.getElementById("commune");
 
-loadRegions(regionSelect, communeSelect);
+linkRegionAndCommune(regionSelect, communeSelect);
+
 // Validates the form fields and returns true if all are valid, false otherwise.
 function validateRegistration() {
   let allGood = true;
@@ -67,19 +68,14 @@ function validateRegistration() {
 }
 
 form.addEventListener("submit", function (event) {
-  event.preventDefault();
   if (!validateRegistration()) {
-    // Take the user to the first field with a problem
+    event.preventDefault(); // the form is not sent while there are errors
     form.querySelector(".invalid").focus();
-    return;
   }
-  // There is no server, so we only show the success message
-  document.getElementById("registration-success").hidden = false;
-  form.hidden = true;
-  window.scrollTo(0, 0);
+  // If everything is valid, the browser sends the form to Flask
 });
 
 form.addEventListener("reset", function () {
   clearErrors(form);
-  loadCommunes("", communeSelect);
+  loadCommunes("", communeSelect, "");
 });

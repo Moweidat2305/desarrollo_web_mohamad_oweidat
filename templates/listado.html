@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Listado</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Inicio</a>
+      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
+      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
+      <a href="{{ url_for('listado') }}" aria-current="page">Avistamientos</a>
+      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Avistamientos registrados</h2>
+    <p>El listado se conectará a la base de datos en la siguiente etapa.</p>
+  </main>
+</body>
+</html>

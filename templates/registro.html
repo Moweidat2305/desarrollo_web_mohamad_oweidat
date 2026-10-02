@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Registro de voluntario</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/registro.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Inicio</a>
+      <a href="{{ url_for('registro') }}" aria-current="page">Registrar voluntario</a>
+      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
+      <a href="{{ url_for('listado') }}">Avistamientos</a>
+      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Registro de voluntario(a)</h2>
+    <p>Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios.</p>
+
+    <form id="registration-form" method="post" action="{{ url_for('registro') }}" novalidate>
+      <fieldset>
+        <legend>Datos personales</legend>
+
+        <label for="name">Nombre completo <abbr title="obligatorio">*</abbr></label>
+        <input type="text" id="name" name="name" placeholder="Ej: Mohamad Oweidat" value="{{ valores.get('name', '') }}">
+        <small>Obligatorio</small>
+        <p class="error-message" id="error-name">{{ errores.get('name', '') }}</p>
+
+        <label for="birth-date">Fecha de nacimiento</label>
+        <input type="date" id="birth-date" name="birth-date" value="{{ valores.get('birth-date', '') }}">
+        <small>Opcional. Debes tener al menos 14 años para participar</small>
+        <p class="error-message" id="error-birth-date">{{ errores.get('birth-date', '') }}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Contacto</legend>
+
+        <label for="email">Correo electrónico <abbr title="obligatorio">*</abbr></label>
+        <input type="email" id="email" name="email" placeholder="correo@ejemplo.cl" value="{{ valores.get('email', '') }}">
+        <small>Obligatorio. Formato: correo@ejemplo.cl</small>
+        <p class="error-message" id="error-email">{{ errores.get('email', '') }}</p>
+
+        <label for="phone">Número de celular</label>
+        <input type="tel" id="phone" name="phone" placeholder="+56 9 1234 5678" value="{{ valores.get('phone', '') }}">
+        <small>Opcional. Celular chileno de 9 dígitos</small>
+        <p class="error-message" id="error-phone">{{ errores.get('phone', '') }}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Dirección postal</legend>
+
+        <label for="region">Región <abbr title="obligatorio">*</abbr></label>
+        <select id="region" name="region">
+          <option value="">Seleccione una región</option>
+          {% for region in regiones %}
+          <option value="{{ region.id }}"{% if valores.get('region') == region.id|string %} selected{% endif %}>{{ region.nombre }}</option>
+          {% endfor %}
+        </select>
+        <small>Obligatorio</small>
+        <p class="error-message" id="error-region">{{ errores.get('region', '') }}</p>
+
+        <label for="commune">Comuna <abbr title="obligatorio">*</abbr></label>
+        <select id="commune" name="commune" data-selected="{{ valores.get('commune', '') }}" disabled>
+          <option value="">Seleccione primero una región</option>
+        </select>
+        <small>Obligatorio. Se habilita al elegir una región</small>
+        <p class="error-message" id="error-commune">{{ errores.get('commune', '') }}</p>
+
+        <label for="street">Calle y número</label>
+        <input type="text" id="street" name="street" placeholder="Ej: Av. Vicuña Mackenna 1290" value="{{ valores.get('street', '') }}">
+        <small>Opcional</small>
+        <p class="error-message" id="error-street">{{ errores.get('street', '') }}</p>
+      </fieldset>
+
+      <button type="submit">Registrarme</button>
+      <button type="reset" class="secondary">Limpiar</button>
+    </form>
+  </main>
+
+  <script>
+    const COMUNAS = {{ comunas | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/regiones.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/validaciones.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+</body>
+</html>

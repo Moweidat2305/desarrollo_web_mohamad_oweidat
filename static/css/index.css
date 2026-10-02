@@ -124,3 +124,44 @@ button.secondary {
     padding: 1rem;
   }
 }
+
+/* Tarea 2: menu de la portada, ultimos avistamientos y mensajes */
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.menu a {
+  display: inline-block;
+  padding: 0.6rem 1.4rem;
+  background: var(--green);
+  color: white;
+  text-decoration: none;
+  border-radius: 3px;
+}
+
+.ultimos {
+  padding: 0;
+  list-style: none;
+}
+
+.ultimos li {
+  border: 1px solid var(--border);
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ultimos strong {
+  color: var(--green);
+}
+
+.success {
+  background: var(--light-green);
+  border-left: 4px solid var(--green);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}

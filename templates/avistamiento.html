@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Informar avistamiento</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/avistamiento.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Inicio</a>
+      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
+      <a href="{{ url_for('avistamiento') }}" aria-current="page">Informar avistamiento</a>
+      <a href="{{ url_for('listado') }}">Avistamientos</a>
+      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Informar un avistamiento</h2>
+    <p>
+      Solo pueden informar avistamientos los voluntarios registrados.
+      Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios.
+    </p>
+
+    <form id="sighting-form" method="post" action="{{ url_for('avistamiento') }}" enctype="multipart/form-data" novalidate>
+      <fieldset>
+        <legend>Voluntario(a)</legend>
+
+        <label for="volunteer-email">Correo con el que te registraste <abbr title="obligatorio">*</abbr></label>
+        <input type="email" id="volunteer-email" name="volunteer-email" placeholder="correo@ejemplo.cl" value="{{ valores.get('volunteer-email', '') }}">
+        <small>Formato: correo@ejemplo.cl</small>
+        <p class="error-message" id="error-volunteer-email">{{ errores.get('volunteer-email', '') }}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>El ave</legend>
+
+        <label for="bird">Ave <abbr title="obligatorio">*</abbr></label>
+        <select id="bird" name="bird">
+          <option value="">Seleccione un ave</option>
+          {% for ave in aves %}
+          <option value="{{ ave.id }}"{% if valores.get('bird') == ave.id|string %} selected{% endif %}>{{ ave.nombre }}</option>
+          {% endfor %}
+        </select>
+        <small>Si no conoces la especie exacta, elige la más parecida.</small>
+        <p class="error-message" id="error-bird">{{ errores.get('bird', '') }}</p>
+
+        <label for="quantity">Cantidad de individuos</label>
+        <input type="number" id="quantity" name="quantity" min="1" max="10000" value="{{ valores.get('quantity', '1') }}">
+        <p class="error-message" id="error-quantity">{{ errores.get('quantity', '') }}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Dónde y cuándo</legend>
+
+        <label for="sighting-region">Región <abbr title="obligatorio">*</abbr></label>
+        <select id="sighting-region" name="sighting-region">
+          <option value="">Seleccione una región</option>
+          {% for region in regiones %}
+          <option value="{{ region.id }}"{% if valores.get('sighting-region') == region.id|string %} selected{% endif %}>{{ region.nombre }}</option>
+          {% endfor %}
+        </select>
+        <p class="error-message" id="error-sighting-region">{{ errores.get('sighting-region', '') }}</p>
+
+        <label for="sighting-commune">Comuna <abbr title="obligatorio">*</abbr></label>
+        <select id="sighting-commune" name="sighting-commune" data-selected="{{ valores.get('sighting-commune', '') }}" disabled>
+          <option value="">Seleccione primero una región</option>
+        </select>
+        <small>Se habilita al elegir una región</small>
+        <p class="error-message" id="error-sighting-commune">{{ errores.get('sighting-commune', '') }}</p>
+
+        <label for="place">Lugar <abbr title="obligatorio">*</abbr></label>
+        <input type="text" id="place" name="place" placeholder="Ej: Humedal de Batuco, orilla norte" value="{{ valores.get('place', '') }}">
+        <small>Un lugar reconocible: parque, humedal, playa, cerro...</small>
+        <p class="error-message" id="error-place">{{ errores.get('place', '') }}</p>
+
+        <label for="date">Fecha del avistamiento <abbr title="obligatorio">*</abbr></label>
+        <input type="date" id="date" name="date" value="{{ valores.get('date', '') }}">
+        <small>No puede ser futura ni tener más de un año de antigüedad.</small>
+        <p class="error-message" id="error-date">{{ errores.get('date', '') }}</p>
+
+        <label for="time">Hora del avistamiento <abbr title="obligatorio">*</abbr></label>
+        <input type="time" id="time" name="time" value="{{ valores.get('time', '') }}">
+        <small>Si el avistamiento es de hoy, no puede ser posterior a la hora actual.</small>
+        <p class="error-message" id="error-time">{{ errores.get('time', '') }}</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Evidencia</legend>
+
+        <label for="files">Fotos o videos <abbr title="obligatorio">*</abbr></label>
+        <input type="file" id="files" name="files" multiple accept="image/*,video/*">
+        <small>Al menos 1 archivo, máximo 5. Formatos: jpg, png, gif, webp, mp4, mov, webm. Máximo 50 MB cada uno.</small>
+        <p class="error-message" id="error-files">{{ errores.get('files', '') }}</p>
+
+        <label for="comment">Comentarios</label>
+        <textarea id="comment" name="comment" placeholder="Comportamiento, clima, otras aves cerca...">{{ valores.get('comment', '') }}</textarea>
+        <small>Opcional. Máximo 500 caracteres.</small>
+        <p class="error-message" id="error-comment">{{ errores.get('comment', '') }}</p>
+      </fieldset>
+
+      <button type="submit">Enviar avistamiento</button>
+      <button type="reset" class="secondary">Limpiar</button>
+    </form>
+  </main>
+
+  <script>
+    const COMUNAS = {{ comunas | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/regiones.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/validaciones.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/avistamiento.js') }}"></script>
+</body>
+</html>

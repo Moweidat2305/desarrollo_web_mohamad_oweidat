@@ -8,7 +8,7 @@ const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "mp4", "mov", "
 const MAX_SIZE = 50 * 1024 * 1024; // 50 MB
 const MAX_FILES = 5;
 
-loadRegions(regionSelect, communeSelect);
+linkRegionAndCommune(regionSelect, communeSelect);
 
 // Returns today's date as "YYYY-MM-DD" which is what the date input gives
 function todayISO() {
@@ -61,17 +61,10 @@ function validateSighting() {
     markField("volunteer-email", "");
   }
 
-  if (document.getElementById("bird-type").value === "") { //vide
-    allGood = markField("bird-type", "Selecciona el tipo de ave.") && allGood;
+  if (document.getElementById("bird").value === "") { //aucun ave choisi dans la liste
+    allGood = markField("bird", "Selecciona el ave que viste.") && allGood;
   } else {
-    markField("bird-type", "");
-  }
-
-  const birdName = document.getElementById("bird-name").value.trim(); // vide ou trop long
-  if (birdName.length < 2 || birdName.length > 60) {
-    allGood = markField("bird-name", "El nombre del ave debe tener entre 2 y 60 caracteres.") && allGood;
-  } else {
-    markField("bird-name", "");
+    markField("bird", "");
   }
 
   const quantity = document.getElementById("quantity").value; //quantité optionnelle
@@ -87,7 +80,7 @@ function validateSighting() {
     markField("sighting-region", "");
   }
 
-  if (communeSelect.value === "") { // commine
+  if (communeSelect.value === "") { // commune
     allGood = markField("sighting-commune", "Selecciona la comuna.") && allGood;
   } else {
     markField("sighting-commune", "");
@@ -104,7 +97,7 @@ function validateSighting() {
   const dateError = validateDate(date); //validatedate appelé
   allGood = markField("date", dateError) && allGood;
 
-  const time = document.getElementById("time").value; //heure optionnelle mais pas dans le futur
+  const time = document.getElementById("time").value; //heure obligatoire mais pas dans le futur
   if (time === "") {
     allGood = markField("time", "Ingresa la hora del avistamiento.") && allGood;
   } else if (date === todayISO() && time > currentTime()) {
@@ -127,18 +120,14 @@ function validateSighting() {
 }
 //submit the form
 form.addEventListener("submit", function (event) {
-  event.preventDefault();
-  if (!validateSighting()) { //on lance toute les validations et si une est fausse on focus sur le premier champ invalide
+  if (!validateSighting()) { //on bloque l'envoi tant qu'il y a une erreur et on focus le premier champ invalide
+    event.preventDefault();
     form.querySelector(".invalid").focus();
-    return;
   }
-  // There is no server, so we only show the success message
-  document.getElementById("sighting-success").hidden = false;
-  form.hidden = true;
-  window.scrollTo(0, 0);
+  // Si tout est valide, le navigateur envoie le formulaire à Flask
 });
 
 form.addEventListener("reset", function () {
   clearErrors(form);
-  loadCommunes("", communeSelect);
+  loadCommunes("", communeSelect, "");
 });
