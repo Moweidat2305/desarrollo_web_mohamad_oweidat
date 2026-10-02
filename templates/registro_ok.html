@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Registro completado</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/registro.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="{{ url_for('index') }}">Inicio</a>
+      <a href="{{ url_for('registro') }}" aria-current="page">Registrar voluntario</a>
+      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
+      <a href="{{ url_for('listado') }}">Avistamientos</a>
+      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+    </nav>
+  </header>
+
+  <main>
+    <p class="success">¡Gracias por sumarte, {{ nombre }}! Tu registro quedó guardado.</p>
+
+    <h2>¿Qué quieres hacer ahora?</h2>
+    <ul>
+      <li><a href="{{ url_for('avistamiento', email=email) }}">Informar un avistamiento como {{ email }}</a></li>
+      <li><a href="{{ url_for('index') }}">Volver al inicio</a></li>
+    </ul>
+  </main>
+</body>
+</html>

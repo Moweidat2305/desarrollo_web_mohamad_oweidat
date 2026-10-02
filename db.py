@@ -43,3 +43,33 @@ def ultimos_avistamientos(cantidad):
         """,
         cantidad=cantidad,
     )
+
+
+def email_registrado(email):
+    filas = consultar("SELECT id FROM voluntario WHERE email = :email", email=email)
+    return len(filas) > 0
+
+
+def comuna_en_region(comuna_id, region_id):
+    filas = consultar(
+        "SELECT id FROM comuna WHERE id = :comuna AND region_id = :region",
+        comuna=comuna_id,
+        region=region_id,
+    )
+    return len(filas) > 0
+
+
+def insertar_voluntario(datos):
+    """Inserta un voluntario. fecha_registro es el momento de la insercion."""
+    with engine.begin() as conn:  # begin: hace COMMIT al final si no hubo error
+        conn.execute(
+            text(
+                """
+                INSERT INTO voluntario
+                    (nombre, email, telefono, fecha_registro, comuna_id, fecha_nacimiento, calle)
+                VALUES
+                    (:nombre, :email, :telefono, NOW(), :comuna_id, :fecha_nacimiento, :calle)
+                """
+            ),
+            datos,
+        )
