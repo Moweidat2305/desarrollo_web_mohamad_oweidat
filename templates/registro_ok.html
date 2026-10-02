@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Avistamientos de aves - Registro completado</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/registro.css') }}">
+  <link rel="stylesheet" href="/static/css/registro.css">
 </head>
 <body>
   <header>
     <h1>Registro de avistamientos de aves</h1>
     <nav>
-      <a href="{{ url_for('index') }}">Inicio</a>
-      <a href="{{ url_for('registro') }}" aria-current="page">Registrar voluntario</a>
-      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
-      <a href="{{ url_for('listado') }}">Avistamientos</a>
-      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+      <a href="/">Inicio</a>
+      <a href="/registro" aria-current="page">Registrar voluntario</a>
+      <a href="/avistamiento">Informar avistamiento</a>
+      <a href="/listado">Avistamientos</a>
+      <a href="/estadisticas">Estadísticas</a>
     </nav>
   </header>
 
@@ -23,8 +23,8 @@
 
     <h2>¿Qué quieres hacer ahora?</h2>
     <ul>
-      <li><a href="{{ url_for('avistamiento', email=email) }}">Informar un avistamiento como {{ email }}</a></li>
-      <li><a href="{{ url_for('index') }}">Volver al inicio</a></li>
+      <li><a href="/avistamiento?email={{ email | urlencode }}">Informar un avistamiento como {{ email }}</a></li>
+      <li><a href="/">Volver al inicio</a></li>
     </ul>
   </main>
 </body>

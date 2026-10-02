@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Avistamientos de aves - Detalle</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/listado.css') }}">
+  <link rel="stylesheet" href="/static/css/listado.css">
 </head>
 <body>
   <header>
     <h1>Registro de avistamientos de aves</h1>
     <nav>
-      <a href="{{ url_for('index') }}">Inicio</a>
-      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
-      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
-      <a href="{{ url_for('listado') }}" aria-current="page">Avistamientos</a>
-      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+      <a href="/">Inicio</a>
+      <a href="/registro">Registrar voluntario</a>
+      <a href="/avistamiento">Informar avistamiento</a>
+      <a href="/listado" aria-current="page">Avistamientos</a>
+      <a href="/estadisticas">Estadísticas</a>
     </nav>
   </header>
 
@@ -48,11 +48,11 @@
         {% for archivo in archivos %}
         <li>
           {% if archivo.es_video %}
-          <video controls src="{{ url_for('static', filename=archivo.ruta_archivo) }}">
+          <video controls src="/static/{{ archivo.ruta_archivo }}">
             Tu navegador no puede reproducir el video {{ archivo.nombre_archivo }}.
           </video>
           {% else %}
-          <img src="{{ url_for('static', filename=archivo.ruta_archivo) }}" alt="Foto del avistamiento: {{ archivo.nombre_archivo }}">
+          <img src="/static/{{ archivo.ruta_archivo }}" alt="Foto del avistamiento: {{ archivo.nombre_archivo }}">
           {% endif %}
         </li>
         {% endfor %}
@@ -62,7 +62,7 @@
       {% endif %}
     </section>
 
-    <p><a href="{{ url_for('listado') }}">Volver al listado</a></p>
+    <p><a href="/listado">Volver al listado</a></p>
   </main>
 </body>
 </html>

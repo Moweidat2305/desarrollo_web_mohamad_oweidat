@@ -1,4 +1,4 @@
--- Ajustes al modelo de tarea2.sql para conservar el formulario de la tarea 1.
+-- Ajustes al modelo de tarea2.sql para conservar el formulario de la tarea 1
 USE tarea2;
 
 -- Voluntario: fecha de nacimiento y calle son opcionales en el formulario

@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Avistamientos de aves - Inicio</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" href="/static/css/index.css">
 </head>
 <body>
   <header>
     <h1>Registro de avistamientos de aves</h1>
     <nav>
-      <a href="{{ url_for('index') }}" aria-current="page">Inicio</a>
-      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
-      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
-      <a href="{{ url_for('listado') }}">Avistamientos</a>
-      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+      <a href="/" aria-current="page">Inicio</a>
+      <a href="/registro">Registrar voluntario</a>
+      <a href="/avistamiento">Informar avistamiento</a>
+      <a href="/listado">Avistamientos</a>
+      <a href="/estadisticas">Estadísticas</a>
     </nav>
   </header>
 
@@ -33,9 +33,9 @@
     <section>
       <h2>¿Qué quieres hacer?</h2>
       <ul class="menu">
-        <li><a href="{{ url_for('registro') }}">Registrar voluntario</a></li>
-        <li><a href="{{ url_for('avistamiento') }}">Informar avistamiento</a></li>
-        <li><a href="{{ url_for('estadisticas') }}">Estadísticas</a></li>
+        <li><a href="/registro">Registrar voluntario</a></li>
+        <li><a href="/avistamiento">Informar avistamiento</a></li>
+        <li><a href="/estadisticas">Estadísticas</a></li>
       </ul>
     </section>
 

@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Avistamientos de aves - Estadísticas</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/estadisticas.css') }}">
+  <link rel="stylesheet" href="/static/css/estadisticas.css">
 </head>
 <body>
   <header>
     <h1>Registro de avistamientos de aves</h1>
     <nav>
-      <a href="{{ url_for('index') }}">Inicio</a>
-      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
-      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
-      <a href="{{ url_for('listado') }}">Avistamientos</a>
-      <a href="{{ url_for('estadisticas') }}" aria-current="page">Estadísticas</a>
+      <a href="/">Inicio</a>
+      <a href="/registro">Registrar voluntario</a>
+      <a href="/avistamiento">Informar avistamiento</a>
+      <a href="/listado">Avistamientos</a>
+      <a href="/estadisticas" aria-current="page">Estadísticas</a>
     </nav>
   </header>
 
@@ -44,7 +44,7 @@
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="{{ url_for('static', filename='js/datos-ejemplo.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/estadisticas.js') }}"></script>
+  <script src="/static/js/datos-ejemplo.js"></script>
+  <script src="/static/js/estadisticas.js"></script>
 </body>
 </html>

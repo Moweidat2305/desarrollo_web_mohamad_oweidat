@@ -3,7 +3,7 @@ import math
 import os
 import uuid
 
-from flask import Flask, abort, flash, redirect, render_template, request, url_for
+from flask import Flask, abort, flash, redirect, render_template, request
 from werkzeug.utils import secure_filename
 
 import db
@@ -82,7 +82,7 @@ def avistamiento():
                     os.remove(os.path.join(app.static_folder, ruta))
                 raise
             flash("¡Gracias! Tu avistamiento quedó registrado.")
-            return redirect(url_for("index"))
+            return redirect("/")
     else:
         # Si viene desde el registro, el correo del voluntario llega en la URL
         valores = {"volunteer-email": request.args.get("email", "")}

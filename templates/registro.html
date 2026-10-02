@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Avistamientos de aves - Registro de voluntario</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/registro.css') }}">
+  <link rel="stylesheet" href="/static/css/registro.css">
 </head>
 <body>
   <header>
     <h1>Registro de avistamientos de aves</h1>
     <nav>
-      <a href="{{ url_for('index') }}">Inicio</a>
-      <a href="{{ url_for('registro') }}" aria-current="page">Registrar voluntario</a>
-      <a href="{{ url_for('avistamiento') }}">Informar avistamiento</a>
-      <a href="{{ url_for('listado') }}">Avistamientos</a>
-      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+      <a href="/">Inicio</a>
+      <a href="/registro" aria-current="page">Registrar voluntario</a>
+      <a href="/avistamiento">Informar avistamiento</a>
+      <a href="/listado">Avistamientos</a>
+      <a href="/estadisticas">Estadísticas</a>
     </nav>
   </header>
 
@@ -22,7 +22,7 @@
     <h2>Registro de voluntario(a)</h2>
     <p>Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios.</p>
 
-    <form id="registration-form" method="post" action="{{ url_for('registro') }}" novalidate>
+    <form id="registration-form" method="post" action="/registro" novalidate>
       <fieldset>
         <legend>Datos personales</legend>
 
@@ -85,8 +85,8 @@
   <script>
     const COMUNAS = {{ comunas | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='js/regiones.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/validaciones.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/registro.js') }}"></script>
+  <script src="/static/js/regiones.js"></script>
+  <script src="/static/js/validaciones.js"></script>
+  <script src="/static/js/registro.js"></script>
 </body>
 </html>

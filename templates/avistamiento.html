@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Avistamientos de aves - Informar avistamiento</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/avistamiento.css') }}">
+  <link rel="stylesheet" href="/static/css/avistamiento.css">
 </head>
 <body>
   <header>
     <h1>Registro de avistamientos de aves</h1>
     <nav>
-      <a href="{{ url_for('index') }}">Inicio</a>
-      <a href="{{ url_for('registro') }}">Registrar voluntario</a>
-      <a href="{{ url_for('avistamiento') }}" aria-current="page">Informar avistamiento</a>
-      <a href="{{ url_for('listado') }}">Avistamientos</a>
-      <a href="{{ url_for('estadisticas') }}">Estadísticas</a>
+      <a href="/">Inicio</a>
+      <a href="/registro">Registrar voluntario</a>
+      <a href="/avistamiento" aria-current="page">Informar avistamiento</a>
+      <a href="/listado">Avistamientos</a>
+      <a href="/estadisticas">Estadísticas</a>
     </nav>
   </header>
 
@@ -25,7 +25,7 @@
       Los campos marcados con <abbr title="obligatorio">*</abbr> son obligatorios.
     </p>
 
-    <form id="sighting-form" method="post" action="{{ url_for('avistamiento') }}" enctype="multipart/form-data" novalidate>
+    <form id="sighting-form" method="post" action="/avistamiento" enctype="multipart/form-data" novalidate>
       <fieldset>
         <legend>Voluntario(a)</legend>
 
@@ -110,8 +110,8 @@
   <script>
     const COMUNAS = {{ comunas | tojson }};
   </script>
-  <script src="{{ url_for('static', filename='js/regiones.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/validaciones.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/avistamiento.js') }}"></script>
+  <script src="/static/js/regiones.js"></script>
+  <script src="/static/js/validaciones.js"></script>
+  <script src="/static/js/avistamiento.js"></script>
 </body>
 </html>
