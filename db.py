@@ -163,3 +163,76 @@ def archivos_de_avistamiento(avistamiento_id):
         "SELECT ruta_archivo, nombre_archivo FROM registro WHERE avistamiento_id = :id ORDER BY id",
         id=avistamiento_id,
     )
+
+
+# Estadisticas: cada funcion devuelve los datos de un grafico
+
+
+def avistamientos_por_dia():
+    """Cantidad de avistamientos por dia, del dia mas antiguo al mas reciente.
+    DATE_FORMAT deja la fecha como texto 'AAAA-MM-DD' (facil de mandar en JSON)."""
+    return consultar(
+        """
+        SELECT DATE_FORMAT(fecha_hora, '%Y-%m-%d') AS dia, COUNT(*) AS total
+        FROM avistamiento
+        GROUP BY dia
+        ORDER BY dia
+        """
+    )
+
+
+def avistamientos_por_ave():
+    """Cantidad de avistamientos de cada ave (solo las aves que tienen alguno)."""
+    return consultar(
+        """
+        SELECT ave.nombre AS ave, COUNT(*) AS total
+        FROM avistamiento a
+        JOIN ave ON ave.id = a.ave_id
+        GROUP BY ave.id, ave.nombre
+        ORDER BY total DESC
+        """
+    )
+
+
+def voluntarios_por_comuna():
+    """Cantidad de voluntarios de cada comuna (solo las comunas que tienen alguno)."""
+    return consultar(
+        """
+        SELECT c.nombre AS comuna, COUNT(*) AS total
+        FROM voluntario v
+        JOIN comuna c ON c.id = v.comuna_id
+        GROUP BY c.id, c.nombre
+        ORDER BY c.nombre
+        """
+    )
+
+
+# Comentarios
+
+
+def comentarios_de_avistamiento(avistamiento_id):
+    """Los comentarios de un avistamiento, del mas reciente al mas antiguo.
+    Se ordena por id porque el id mas alto es siempre el ultimo agregado."""
+    return consultar(
+        """
+        SELECT nombre, texto, DATE_FORMAT(fecha, '%d/%m/%Y %H:%i') AS fecha
+        FROM comentario
+        WHERE avistamiento_id = :id
+        ORDER BY id DESC
+        """,
+        id=avistamiento_id,
+    )
+
+
+def insertar_comentario(datos):
+    """Guarda un comentario. NOW() pone la fecha y hora del comentario."""
+    with engine.begin() as conn:
+        conn.execute(
+            text(
+                """
+                INSERT INTO comentario (nombre, texto, fecha, avistamiento_id)
+                VALUES (:nombre, :texto, NOW(), :avistamiento_id)
+                """
+            ),
+            datos,
+        )

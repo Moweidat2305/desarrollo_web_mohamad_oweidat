@@ -213,3 +213,63 @@ tr[data-url]:hover {
   color: white;
   border-color: var(--green);
 }
+
+/* Tarea 3: comentarios */
+
+#comment-form label {
+  display: block;
+  margin: 0.9rem 0 0.3rem;
+}
+
+#comment-form input,
+#comment-form textarea {
+  max-width: 100%;
+  padding: 0.5rem;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+
+#comment-form input {
+  width: 420px;
+}
+
+#comment-form button {
+  margin-top: 1rem;
+}
+
+#comment-form .invalid {
+  border-color: var(--red);
+  background: pink;
+}
+
+abbr[title="obligatorio"] {
+  color: var(--red);
+  text-decoration: none;
+}
+
+.error-message {
+  color: var(--red);
+  font-size: 0.9rem;
+  margin: 0.2rem 0 0;
+}
+
+.comentarios {
+  list-style: none;
+  padding: 0;
+}
+
+.comentarios li {
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 0;
+}
+
+.comentarios p {
+  margin: 0.3rem 0 0;
+  white-space: pre-line;
+}
+
+.comment-date {
+  color: var(--gray);
+  font-size: 0.9rem;
+}

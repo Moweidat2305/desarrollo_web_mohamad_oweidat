@@ -19,32 +19,27 @@
   </header>
 
   <main>
-    <h2>Indicadores</h2>
-    <p>Los gráficos todavía usan datos de ejemplo. Se conectarán a la base de datos en la Tarea 3.</p>
+    <h2>Estadísticas</h2>
 
     <section class="chart">
-      <h3>Avistamientos por tipo de ave</h3>
-      <canvas id="types-chart"></canvas>
+      <h3>Avistamientos por día</h3>
+      <canvas id="days-chart">Gráfico de líneas con la cantidad de avistamientos por día.</canvas>
     </section>
 
     <section class="chart">
-      <h3>Avistamientos por mes</h3>
-      <canvas id="months-chart"></canvas>
+      <h3>Avistamientos por ave</h3>
+      <canvas id="birds-chart">Gráfico de torta con el total de avistamientos por ave.</canvas>
     </section>
 
     <section class="chart">
-      <h3>Voluntarios registrados por región</h3>
-      <canvas id="regions-chart"></canvas>
+      <h3>Voluntarios por comuna</h3>
+      <canvas id="communes-chart">Gráfico de barras con el total de voluntarios por comuna.</canvas>
     </section>
 
-    <section class="chart">
-      <h3>Voluntarios más activos</h3>
-      <canvas id="volunteers-chart"></canvas>
-    </section>
+    <p><a href="/">Volver a la portada</a></p>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="/static/js/datos-ejemplo.js"></script>
   <script src="/static/js/estadisticas.js"></script>
 </body>
 </html>

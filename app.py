@@ -3,11 +3,12 @@ import math
 import os
 import uuid
 
-from flask import Flask, abort, flash, redirect, render_template, request
+from flask import Flask, abort, flash, jsonify, redirect, render_template, request
+
 from werkzeug.utils import secure_filename
 
 import db
-from validaciones import validar_avistamiento, validar_voluntario
+from validaciones import validar_avistamiento, validar_comentario, validar_voluntario
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # firma la cookie de los mensajes flash
@@ -132,9 +133,44 @@ def detalle(avistamiento_id):
     return render_template("detalle.html", a=avistamiento, archivos=archivos)
 
 
+@app.route("/detalle/<int:avistamiento_id>/comentarios", methods=["GET", "POST"])
+def comentarios(avistamiento_id):
+    """La pide el JavaScript de detalle con fetch.
+    GET devuelve la lista de comentarios, POST agrega uno. Siempre responde JSON."""
+    if db.obtener_avistamiento(avistamiento_id) is None:
+        abort(404)
+
+    if request.method == "POST":
+        errores, datos = validar_comentario(request.form)
+        if errores:
+            # 400: el JavaScript muestra cada mensaje bajo su campo
+            return jsonify({"errores": errores}), 400
+        datos["avistamiento_id"] = avistamiento_id
+        db.insertar_comentario(datos)
+        return jsonify({"ok": True}), 201  # 201: se creo el comentario
+
+    return jsonify(db.comentarios_de_avistamiento(avistamiento_id))
+
+
 @app.route("/estadisticas")
 def estadisticas():
     return render_template("estadisticas.html")
+
+
+@app.route("/estadisticas/avistamientos-por-dia")
+def estadisticas_por_dia():
+    # Devuelve JSON: el JavaScript de la pagina de estadisticas lo pide con fetch
+    return jsonify(db.avistamientos_por_dia())
+
+
+@app.route("/estadisticas/avistamientos-por-ave")
+def estadisticas_por_ave():
+    return jsonify(db.avistamientos_por_ave())
+
+
+@app.route("/estadisticas/voluntarios-por-comuna")
+def estadisticas_por_comuna():
+    return jsonify(db.voluntarios_por_comuna())
 
 
 @app.errorhandler(413)

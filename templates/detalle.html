@@ -37,8 +37,8 @@
       <dt>Informado por</dt>
       <dd>{{ a.voluntario }}</dd>
 
-      <dt>Comentarios</dt>
-      <dd>{{ a.descripcion if a.descripcion else 'Sin comentarios' }}</dd>
+      <dt>Descripción</dt>
+      <dd>{{ a.descripcion if a.descripcion else 'Sin descripción' }}</dd>
     </dl>
 
     <section>
@@ -62,7 +62,30 @@
       {% endif %}
     </section>
 
+    <section>
+      <h3>Comentarios</h3>
+      <ul class="comentarios" id="comment-list"></ul>
+      <p id="comment-list-message">Cargando comentarios...</p>
+
+      <h4>Agregar comentario</h4>
+      <form id="comment-form" method="post" action="/detalle/{{ a.id }}/comentarios" novalidate>
+        <label for="commenter-name">Nombre <abbr title="obligatorio">*</abbr></label>
+        <input type="text" id="commenter-name" name="commenter-name" maxlength="50">
+        <p class="error-message" id="error-commenter-name"></p>
+
+        <label for="comment-text">Comentario <abbr title="obligatorio">*</abbr></label>
+        <textarea id="comment-text" name="comment-text" rows="3" cols="40" maxlength="300"></textarea>
+        <p class="error-message" id="error-comment-text"></p>
+
+        <button type="submit">Agregar comentario</button>
+        <p id="comment-result" role="status"></p>
+      </form>
+    </section>
+
     <p><a href="/listado">Volver al listado</a></p>
   </main>
+
+  <script src="/static/js/validaciones.js"></script>
+  <script src="/static/js/comentarios.js"></script>
 </body>
 </html>

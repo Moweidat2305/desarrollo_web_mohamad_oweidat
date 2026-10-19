@@ -220,3 +220,24 @@ def validar_avistamiento(form, archivos):
         "comuna_id": comuna_id,
     }
     return errores, datos, archivos
+
+
+#Comentario
+
+def validar_comentario(form):
+    """Devuelve (errores, datos). Mismas reglas que el JavaScript."""
+    errores = {}
+
+    nombre = form.get("commenter-name", "").strip()
+    if len(nombre) < 3 or len(nombre) > 50:
+        errores["commenter-name"] = "El nombre debe tener entre 3 y 50 caracteres."
+
+    texto = form.get("comment-text", "").strip()
+    if len(texto) < 5:
+        errores["comment-text"] = "El comentario debe tener al menos 5 caracteres."
+    elif len(texto) > 300:
+        # La columna texto de la tabla es VARCHAR(300)
+        errores["comment-text"] = "El comentario no puede superar los 300 caracteres."
+
+    datos = {"nombre": nombre, "texto": texto}
+    return errores, datos
