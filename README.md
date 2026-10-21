@@ -29,7 +29,7 @@ Si root tiene contraseña agregar `-p` a los comandos `mysql`. En Windows, los c
 
 ## Estadisticas
 
-Para los graficos use Chart.js 4.4.1 (https://www.chartjs.org/) que tiene licencia MIT. Lo cargo desde el CDN de jsDelivr. Ya lo habia usado en la tarea 1.
+Para los graficos use Chart.js 4.4.1.
 
 La pagina de estadisticas llega sin datos. El JavaScript pide los datos con fetch a tres URL de Flask que responden en JSON, y despues dibuja los graficos:
 
