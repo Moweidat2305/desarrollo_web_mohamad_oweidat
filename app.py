@@ -1,4 +1,4 @@
-"""Tarea 2: aplicacion Flask para registrar avistamientos de aves."""
+"""Tarea 3: aplicacion Flask para registrar avistamientos de aves."""
 import math
 import os
 import uuid
@@ -23,7 +23,7 @@ EXTENSIONES_VIDEO = (".mp4", ".mov", ".webm")
 
 
 def guardar_archivos(archivos):
-    """Comentario del funcion:
+    """
     Guarda cada archivo con un nombre unico y devuelve [(ruta, nombre_original)].
     El nombre en disco es aleatorio (uuid): asi dos archivos con el mismo nombre
     no se pisan y nadie puede elegir la ruta donde se guarda.

@@ -1,5 +1,5 @@
 // Charts of the statistics page, built with Chart.js.
-// The page arrives without data: fetch asks Flask for it, then Chart.js draws it.
+// The page arrives without data: fetch asks Flask for it then Chart.js draws it.
 
 const GREEN = "seagreen";
 
@@ -12,7 +12,7 @@ function colors(amount) {
   return list;
 }
 
-// Replaces the canvas with a text (when there is no data or there was an error)
+// this function replaces the canvas with a text (when there is no data or there was an error)
 function showMessage(canvasId, message) {
   const p = document.createElement("p");
   p.textContent = message;
