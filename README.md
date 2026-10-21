@@ -25,7 +25,7 @@ python app.py
 
 Despues abrir http://127.0.0.1:5001 (uso el puerto 5001 porque en mi Mac el 5000 lo usa AirPlay).
 
-Si root tiene contraseña, agregar `-p` a los comandos `mysql`. En Windows, los comandos `mysql` con `<` funcionan en cmd, el entorno se activa con `.venv\Scripts\activate` y se usa `python` en vez de `python3`.
+Si root tiene contraseña agregar `-p` a los comandos `mysql`. En Windows, los comandos `mysql` con `<` funcionan en cmd, el entorno se activa con `.venv\Scripts\activate` y se usa `python` en vez de `python3`.
 
 ## Estadisticas
 
