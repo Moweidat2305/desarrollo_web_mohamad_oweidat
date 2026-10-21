@@ -1,6 +1,6 @@
 # Tarea 3 - Avistamientos de aves - Mohamad Oweidat
 
-Esta tarea sigue el proyecto Flask de la tarea 2. Agregue las estadisticas con los datos de la base y los comentarios en el detalle de cada avistamiento.
+Esta tarea es para agregar las estadisticas con los datos de la base y los comentarios en el detalle de cada avistamiento.
 
 ## Como lanzarlo
 
@@ -23,13 +23,13 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Despues abrir http://127.0.0.1:5001 (uso el puerto 5001 porque en Mac el 5000 lo usa AirPlay).
+Despues abrir http://127.0.0.1:5001 (uso el puerto 5001 porque en mi Mac el 5000 lo usa AirPlay).
 
 Si root tiene contraseña, agregar `-p` a los comandos `mysql`. En Windows, los comandos `mysql` con `<` funcionan en cmd, el entorno se activa con `.venv\Scripts\activate` y se usa `python` en vez de `python3`.
 
 ## Estadisticas
 
-Para los graficos use Chart.js 4.4.1 (https://www.chartjs.org/), que tiene licencia MIT. Lo cargo desde el CDN de jsDelivr. Ya lo habia usado en la tarea 1.
+Para los graficos use Chart.js 4.4.1 (https://www.chartjs.org/) que tiene licencia MIT. Lo cargo desde el CDN de jsDelivr. Ya lo habia usado en la tarea 1.
 
 La pagina de estadisticas llega sin datos. El JavaScript pide los datos con fetch a tres URL de Flask que responden en JSON, y despues dibuja los graficos:
 
@@ -44,11 +44,3 @@ El grafico de torta muestra los avistamientos por ave y no por tipo, porque la t
 En el detalle de un avistamiento se ven sus comentarios y hay un formulario para agregar uno. Todo funciona con fetch, sin recargar la pagina. La URL es `/detalle/<id>/comentarios`: con GET devuelve la lista y con POST guarda un comentario nuevo.
 
 Los datos se validan en JavaScript y otra vez en el servidor: el nombre debe tener entre 3 y 50 caracteres y el comentario al menos 5. Tambien puse un maximo de 300 caracteres porque la columna `texto` es `VARCHAR(300)`. Si hay errores, se muestran debajo de cada campo y el formulario no se borra.
-
-En el detalle, lo que antes se llamaba "Comentarios" (la descripcion del avistamiento) ahora se llama "Descripción", para no confundirlo con los comentarios nuevos.
-
-## Otras cosas
-
-- No cambie `tarea2.sql` ni `tabla-comentario.sql`. Mis cambios a la base de la tarea 2 estan en `sql/ajustes.sql`.
-- Las consultas SQL usan parametros, y los comentarios se muestran con `textContent`. Asi, si alguien escribe `<script>` en un comentario, se ve como texto y no se ejecuta.
-- La rama se llama `Tarea_3` y no "Tarea 3" porque Git no acepta espacios en el nombre de una rama.
