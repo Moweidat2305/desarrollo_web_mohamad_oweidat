@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avistamientos de aves - Buscador</title>
+  <link rel="stylesheet" href="buscador.css">
+</head>
+<body>
+  <header>
+    <h1>Registro de avistamientos de aves</h1>
+    <nav>
+      <a href="http://127.0.0.1:5001/">Inicio</a>
+      <a href="http://127.0.0.1:5001/registro">Registrar voluntario</a>
+      <a href="http://127.0.0.1:5001/avistamiento">Informar avistamiento</a>
+      <a href="http://127.0.0.1:5001/listado">Avistamientos</a>
+      <a href="http://127.0.0.1:5001/estadisticas">Estadísticas</a>
+      <a href="/" aria-current="page">Buscador</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Buscador de avistamientos</h2>
+
+    <form id="search-form">
+      <label for="texto">Buscar por ave, voluntario o comuna</label>
+      <input type="text" id="texto" name="texto" maxlength="50" autocomplete="off">
+    </form>
+
+    <p id="mensaje"></p>
+
+    <div id="resultados" class="tabla" hidden>
+      <table>
+        <thead>
+          <tr>
+            <th>Voluntario</th>
+            <th>Día</th>
+            <th>Ave</th>
+            <th>Comuna</th>
+            <th>Nota</th>
+            <th>Evaluar</th>
+          </tr>
+        </thead>
+        <tbody id="filas"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="buscador.js"></script>
+</body>
+</html>

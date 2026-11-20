@@ -1,46 +1,33 @@
-# Tarea 3 - Avistamientos de aves - Mohamad Oweidat
+# Tarea 4 - Avistamientos de aves - Mohamad Oweidat
 
-Esta tarea es para agregar las estadisticas con los datos de la base y los comentarios en el detalle de cada avistamiento.
+En esta tarea agrego un buscador de avistamientos y la opcion de evaluarlos con una nota. Esta hecha con Spring Boot y esta en la carpeta `tarea4/`. La app Flask de las tareas anteriores sigue en la raiz del repositorio, solo le agregue el enlace al buscador en el menu.
 
 ## Como lanzarlo
 
-Crear la base de datos, en este orden:
+Se usa la misma base `tarea2` de las tareas anteriores. Solo hay que agregar la tabla `nota`:
 
-```
-mysql -u root --default-character-set=utf8mb4 < sql/tarea2.sql
-mysql -u root --default-character-set=utf8mb4 tarea2 < sql/region-comuna.sql
-mysql -u root --default-character-set=utf8mb4 tarea2 < sql/aves.sql
-mysql -u root --default-character-set=utf8mb4 < sql/ajustes.sql
-mysql -u root --default-character-set=utf8mb4 < sql/tabla-comentario.sql
-```
+    mysql -u root --default-character-set=utf8mb4 < sql/tabla-nota.sql
 
-Instalar y lanzar:
+Si la base no existe todavia, primero hay que correr los scripts de la tarea 3 (`tarea2.sql`, `region-comuna.sql`, `aves.sql`, `ajustes.sql` y `tabla-comentario.sql`).
 
-```
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python app.py
-```
+Hay que tener las dos apps corriendo, cada una en su terminal. Primero la app Flask, en la raiz del repositorio:
 
-Despues abrir http://127.0.0.1:5001 (uso el puerto 5001 porque en mi Mac el 5000 lo usa AirPlay).
+    python app.py
 
-Si root tiene contraseña agregar `-p` a los comandos `mysql`. En Windows, los comandos `mysql` con `<` funcionan en cmd, el entorno se activa con `.venv\Scripts\activate` y se usa `python` en vez de `python3`.
+Despues el buscador con Spring Boot (Java 17 o mas):
 
-## Estadisticas
+    cd tarea4
+    ./mvnw spring-boot:run
 
-Para los graficos use Chart.js 4.4.1 (https://www.chartjs.org/) que tiene licencia MIT. Lo cargo desde el CDN de jsDelivr. Ya lo habia usado en la tarea 1.
+En Windows se usa `mvnw.cmd spring-boot:run`.
 
-La pagina de estadisticas llega sin datos. El JavaScript pide los datos con fetch a tres URL de Flask que responden en JSON, y despues dibuja los graficos:
+Con las dos corriendo, se abre el sitio de siempre en http://127.0.0.1:5001 y se entra al buscador con el enlace "Buscador" del menu. Ahi se escribe el nombre de un ave, un voluntario o una comuna y los resultados aparecen solos.
 
-- `/estadisticas/avistamientos-por-dia` para el grafico de lineas
-- `/estadisticas/avistamientos-por-ave` para el grafico de torta
-- `/estadisticas/voluntarios-por-comuna` para el grafico de barras
+## Como funciona
 
-El grafico de torta muestra los avistamientos por ave y no por tipo, porque la tabla `ave` no tiene tipo (igual que en la tarea 2). Los dias del grafico de lineas son los dias en que se vio el ave.
-
-## Comentarios
-
-En el detalle de un avistamiento se ven sus comentarios y hay un formulario para agregar uno. Todo funciona con fetch, sin recargar la pagina. La URL es `/detalle/<id>/comentarios`: con GET devuelve la lista y con POST guarda un comentario nuevo.
-
-Los datos se validan en JavaScript y otra vez en el servidor: el nombre debe tener entre 3 y 50 caracteres y el comentario al menos 5. Tambien puse un maximo de 300 caracteres porque la columna `texto` es `VARCHAR(300)`. Si hay errores, se muestran debajo de cada campo y el formulario no se borra.
+- El buscador es otra app y corre en el puerto 8080, pero usa la misma base que Flask. Las dos tienen el mismo menu, asi que se puede pasar de una a la otra.
+- Use Spring Boot 4.1 con Spring Web, Spring Data JPA y el driver de MySQL. Las tablas ya existen por eso puse `spring.jpa.hibernate.ddl-auto=none`: Spring no crea ni cambia nada en la base.
+- La busqueda se hace cada vez que cambia el texto. No distingue mayusculas ni tildes, porque asi compara MySQL en esta base. El resaltado hace lo mismo, asi "galapagos" resalta "Galápagos".
+- La nota que se muestra es el promedio de todas las notas del avistamiento. Si todavia no tiene, se muestra "-".
+- Al hacer clic en "Evaluar" aparece una lista con las notas de 1 a 7. Al elegir una, se guarda sin recargar la pagina y se actualiza el promedio de esa fila.
+- El servidor solo acepta numeros enteros de 1 a 7 y revisa que el avistamiento exista, aunque la lista ya limite las opciones.
